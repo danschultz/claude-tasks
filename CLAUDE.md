@@ -6,7 +6,7 @@ files and run using the Claude Agent Typescript SDK.
 ## Documentation
 
 * @docs/task-file-format.md: Describes the Markdown file format used to define
-  tasks, including all `claude_options` configuration options.
+  tasks, including all `claudeOptions` configuration options.
 * @docs/task-runner.md: Describes how the task runner discovers, schedules, and
   executes tasks.
 
@@ -16,5 +16,5 @@ files and run using the Claude Agent Typescript SDK.
 
 ## Project Workflows
 
-* `npm run test`: Run tests for the project.
-* `npm run test:integration`: Run integration tests for the project.
+* `npm run test:unit`: Run unit tests (`*.unit.test.ts`).
+* `npm run test:integration`: Run integration tests (`*.integration.test.ts`).
