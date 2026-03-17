@@ -1,0 +1,21 @@
+{
+  "name": "claude-tasks",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/runner.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "vitest run src/runner.integration.test.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.76",
+    "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

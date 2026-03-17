@@ -1,17 +1,20 @@
 # CLAUDE.md
 
-A simple project to run automated tasks with Claude.
+This is a project that runs tasks using Claude. Tasks are defined as Markdown
+files and run using the Claude Agent Typescript SDK.
+
+## Documentation
+
+* @docs/task-file-format.md: Describes the Markdown file format used to define
+  tasks, including all `claude_options` configuration options.
+* @docs/task-runner.md: Describes how the task runner discovers, schedules, and
+  executes tasks.
 
 ## Project Structure
 
-* `./output`: A directory containing the results of a task run.
-* `./tasks`: A directory containing the tasks to run.
-* `./run.sh`: A Bash script to run tasks with Claude.
+* `./docs`: A directory containing documentation for the project.
 
-## Task File Format
+## Project Workflows
 
-* A task is defined as a Markdown file.
-* The beginning of the file must contain frontmatter that describes the task.
-*
-
-<!-- Add build, lint, and test commands here as the project develops. -->
+* `npm run test`: Run tests for the project.
+* `npm run test:integration`: Run integration tests for the project.
