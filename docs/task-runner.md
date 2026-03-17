@@ -39,10 +39,10 @@ tags will be scheduled to run.
    where `[datetime]` is the local machine time at the moment the runner starts.
 
 4. **Run tasks** — Execute each scheduled task using the Claude Agent SDK, with
-   the `claude_options` from the task's frontmatter. Any files the task produces
+   the `claudeOptions` from the task's frontmatter. Any files the task produces
    are written to its output directory. The runner does not set `permissionMode`
    or `allowDangerouslySkipPermissions` — all permission configuration must be
-   defined in the task's `claude_options`. The task's return message is a summary
+   defined in the task's `claudeOptions`. The task's return message is a summary
    of the task:
 
    - **Success**: A summary of all outputs — the files written by the agent,
