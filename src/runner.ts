@@ -17,7 +17,7 @@ interface McpServerSpec {
 export interface TaskFrontmatter {
   name: string;
   tags: string | string[];
-  claude_options?: {
+  claudeOptions?: {
     allowedTools?: string[];
     permissionMode?: 'default' | 'acceptEdits' | 'bypassPermissions' | 'plan';
     debug?: boolean;
@@ -128,7 +128,7 @@ export async function runTask(
   task: TaskDefinition,
   outputDir: string
 ): Promise<{ status: 'success' | 'failed'; resultSummary: string }> {
-  const options = buildQueryOptions(task.data.claude_options, outputDir);
+  const options = buildQueryOptions(task.data.claudeOptions, outputDir);
   const q = query({ prompt: task.content, options });
 
   for await (const msg of q) {

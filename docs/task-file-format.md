@@ -44,20 +44,20 @@ tags:
   - reporting
 ```
 
-### `claude_options`
+### `claudeOptions`
 
 **Type:** `object` — **Optional**
 
 Options passed directly to the `query` function. See the
-[`claude_options` reference](#claude_options-reference) below.
+[`claudeOptions` reference](#claudeOptions-reference) below.
 
 ```yaml
-claude_options:
+claudeOptions:
   model: claude-opus-4-6
   maxTurns: 5
 ```
 
-## `claude_options` Reference
+## `claudeOptions` Reference
 
 | Option              | Type                          | Default     | Description |
 |---------------------|-------------------------------|-------------|-------------|
@@ -88,7 +88,7 @@ tags: test
 Write "Hello, world!" to a file named `hello.txt`.
 ```
 
-### Task with `claude_options`
+### Task with `claudeOptions`
 
 A task using a specific model, capped turns, and a restricted set of tools:
 
@@ -98,7 +98,7 @@ name: list-open-prs
 tags:
   - daily
   - github
-claude_options:
+claudeOptions:
   model: claude-opus-4-6
   maxTurns: 10
   effort: high
@@ -119,7 +119,7 @@ A task that configures an MCP server inline:
 ---
 name: fetch-data
 tags: etl
-claude_options:
+claudeOptions:
   maxBudgetUsd: 0.50
   mcpServers:
     - name: my-server

@@ -72,7 +72,7 @@ describe('formatDirDatetime', () => {
 // ── buildQueryOptions ─────────────────────────────────────────────────────────
 
 describe('buildQueryOptions', () => {
-  it('returns cwd when no claude_options provided', () => {
+  it('returns cwd when no claudeOptions provided', () => {
     const opts = buildQueryOptions(undefined, '/output/task');
     expect(opts).toEqual({ cwd: '/output/task' });
   });
@@ -201,7 +201,7 @@ describe('filterTasksByTags', () => {
 describe('runTask', () => {
   const task: TaskDefinition = {
     file: 'task.md',
-    data: { name: 'my-task', tags: 'test', claude_options: { model: 'claude-sonnet-4-6' } },
+    data: { name: 'my-task', tags: 'test', claudeOptions: { model: 'claude-sonnet-4-6' } },
     content: 'Do the thing.',
   };
 
@@ -224,7 +224,7 @@ describe('runTask', () => {
     expect(result.resultSummary).toBe('Wrote output.txt with 3 lines.');
   });
 
-  it('passes cwd and claude_options to query', async () => {
+  it('passes cwd and claudeOptions to query', async () => {
     const successMsg = { type: 'result', subtype: 'success', result: 'done', is_error: false };
     mockQuery.mockReturnValue((async function* () { yield successMsg; })() as never);
 
