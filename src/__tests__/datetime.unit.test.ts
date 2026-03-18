@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatLocalISO, formatDirDatetime } from './datetime.js';
+import { formatLocalISO, formatDirDatetime } from '../datetime.js';
 
 // ── formatLocalISO ────────────────────────────────────────────────────────────
 

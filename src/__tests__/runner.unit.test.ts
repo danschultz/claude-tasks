@@ -6,7 +6,7 @@ import {
   runTask,
   run,
   type TaskDefinition,
-} from './runner.js';
+} from '../runner.js';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 

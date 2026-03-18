@@ -6,16 +6,17 @@
     "start": "tsx src/runner.ts",
     "test": "vitest run",
     "test:unit": "vitest run unit.test",
-    "test:integration": "vitest run integration.test",
-    "test:watch": "vitest"
+    "test:integration": "npm run docker:build && vitest run integration.test",
+    "test:watch": "vitest",
+    "docker:build": "docker build -t claude-tasks:local ."
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.2.76",
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   }

@@ -16,10 +16,11 @@ tags will be scheduled to run.
 
 ## Environment Variables
 
-| Variable     | Default    | Description                                        |
-|--------------|------------|----------------------------------------------------|
-| `TASK_DIR`   | `./tasks`  | Directory containing task Markdown files.          |
-| `OUTPUT_DIR` | `./output` | Root directory where task output is written.       |
+| Variable            | Default    | Description                                                   |
+|---------------------|------------|---------------------------------------------------------------|
+| `TASK_DIR`          | `./tasks`  | Directory containing task Markdown files.                     |
+| `OUTPUT_DIR`        | `./output` | Root directory where task output is written.                  |
+| `ANTHROPIC_API_KEY` | —          | Anthropic API key. Required when not using OAuth credentials. |
 
 ## Execution Flow
 
