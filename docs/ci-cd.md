@@ -30,10 +30,11 @@ execute the unit test suite.
 
 ### Docker Build & Publish
 
-Sets up Node using the version from `.nvmrc`, then builds the Docker image using
-`npm run docker:build` to verify the image compiles successfully. The image is then pushed to
+Builds the Docker image using `docker/build-push-action` and pushes it to
 `ghcr.io/danschultz/claude-tasks` with tags based on the trigger type (see
-[Docker Image Tags](#docker-image-tags) below).
+[Docker Image Tags](#docker-image-tags) below). GitHub Actions layer caching
+is enabled to speed up builds. For pull requests from forks, the image is built
+but not pushed.
 
 ## Docker Image Tags
 
