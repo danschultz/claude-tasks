@@ -21,6 +21,9 @@ files and run using the Claude Agent Typescript SDK.
 Tests live in `src/__tests__/` and follow the naming convention
 `{filename}.{unit|integration}.test.ts`.
 
+Test task files (Markdown task files used for testing) should follow the naming
+convention `test-{name}.md` (e.g. `test-foo-bar.md`).
+
 * `npm run test:unit`: Run unit tests (`*.unit.test.ts`).
 * `npm run test:integration`: Run integration tests (`*.integration.test.ts`).
 
