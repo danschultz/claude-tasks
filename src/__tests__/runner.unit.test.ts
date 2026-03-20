@@ -339,6 +339,51 @@ describe('run', () => {
     expect(summary.taskRuns[1].taskName).toBe('task-a');
   });
 
+  it('appends new task runs to existing task-runs.json instead of replacing it', async () => {
+    // First run — task-a executes and results are written to task-runs.json
+    mockReaddir.mockResolvedValue(['task-a.md'] as never);
+    mockReadFile.mockResolvedValueOnce('---\nname: task-a\ntags: daily\n---\n\nDo A.' as never);
+    mockQuery.mockReturnValue(
+      (async function* () {
+        yield { type: 'result', subtype: 'success', result: 'done-a', is_error: false };
+      })() as never
+    );
+
+    await run(['daily'], './tasks', './output');
+
+    expect(mockWriteFile).toHaveBeenCalledTimes(1);
+    const firstWriteContent = mockWriteFile.mock.calls[0][1] as string;
+
+    // Second run — task-b executes; the existing task-runs.json holds task-a's record
+    vi.clearAllMocks();
+    mockMkdir.mockResolvedValue(undefined as never);
+    mockWriteFile.mockResolvedValue(undefined as never);
+
+    mockReaddir.mockResolvedValue(['task-b.md'] as never);
+    // First readFile call is for task-b.md; subsequent calls return the existing task-runs.json
+    mockReadFile
+      .mockResolvedValueOnce('---\nname: task-b\ntags: daily\n---\n\nDo B.' as never)
+      .mockResolvedValue(firstWriteContent as never);
+
+    mockQuery.mockReturnValue(
+      (async function* () {
+        yield { type: 'result', subtype: 'success', result: 'done-b', is_error: false };
+      })() as never
+    );
+
+    await run(['daily'], './tasks', './output');
+
+    // Both the previous run (task-a) and the new run (task-b) should appear in the file
+    expect(mockWriteFile).toHaveBeenCalledTimes(1);
+    const secondWriteContent = mockWriteFile.mock.calls[0][1] as string;
+    const summary = JSON.parse(secondWriteContent);
+    const taskNames = summary.taskRuns.map((r: { taskName: string }) => r.taskName);
+
+    expect(summary.taskRuns).toHaveLength(2);
+    expect(taskNames).toContain('task-a');
+    expect(taskNames).toContain('task-b');
+  });
+
   it('records durationSeconds as ceiling of elapsed milliseconds', async () => {
     mockReaddir.mockResolvedValue(['task-a.md'] as never);
     mockReadFile.mockResolvedValue('---\nname: task-a\ntags: daily\n---\n\nDo A.' as never);
