@@ -179,10 +179,20 @@ export async function run(
     });
   }
 
-  taskRuns.sort((a, b) => b.startedAt.localeCompare(a.startedAt));
-
   const summaryPath = join(outputDir, 'task-runs.json');
-  await writeFile(summaryPath, JSON.stringify({ taskRuns }, null, 2), 'utf-8');
+
+  let existingRuns: TaskRun[] = [];
+  try {
+    const existing = await readFile(summaryPath, 'utf-8');
+    existingRuns = (JSON.parse(existing) as { taskRuns: TaskRun[] }).taskRuns ?? [];
+  } catch {
+    // File doesn't exist yet — start fresh
+  }
+
+  const allRuns = [...existingRuns, ...taskRuns];
+  allRuns.sort((a, b) => b.startedAt.localeCompare(a.startedAt));
+
+  await writeFile(summaryPath, JSON.stringify({ taskRuns: allRuns }, null, 2), 'utf-8');
   console.log(`Summary written to ${summaryPath}`);
 }
 
