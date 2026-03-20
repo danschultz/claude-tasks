@@ -11,6 +11,14 @@ files and run using the Claude Agent Typescript SDK.
   executes tasks.
 * @docs/docker.md: Describes how to build and publish the Docker image,
   including the Dockerfile specification and GitHub Actions publishing workflow.
+* @docs/ci-cd.md: Describes the CI/CD pipeline, including triggers, jobs, and
+  Docker image tagging strategy.
+
+## Node Version
+
+The `.nvmrc` file at the root of the repository is the source of truth for the
+Node version used by this project. Whenever the Node version needs to be
+resolved — in CI workflows, scripts, or tooling — it must be read from `.nvmrc`.
 
 ## Project Structure
 
