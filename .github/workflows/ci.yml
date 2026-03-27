@@ -24,6 +24,21 @@ jobs:
 
       - run: npm run test:unit
 
+  format:
+    name: Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm install
+
+      - run: npm run check-format
+
   docker:
     name: Docker Build & Publish
     runs-on: ubuntu-latest

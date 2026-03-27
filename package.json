@@ -8,7 +8,9 @@
     "test:unit": "vitest run unit.test",
     "test:integration": "npm run docker:build && vitest run integration.test",
     "test:watch": "vitest",
-    "docker:build": "docker build -t claude-tasks:local ."
+    "docker:build": "docker build -t claude-tasks:local .",
+    "format": "prettier --write .",
+    "check-format": "prettier --check ."
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.2.76",
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   }

@@ -5,13 +5,13 @@ files and run using the Claude Agent Typescript SDK.
 
 ## Documentation
 
-* @docs/task-file-format.md: Describes the Markdown file format used to define
+- @docs/task-file-format.md: Describes the Markdown file format used to define
   tasks, including all `claudeOptions` configuration options.
-* @docs/task-runner.md: Describes how the task runner discovers, schedules, and
+- @docs/task-runner.md: Describes how the task runner discovers, schedules, and
   executes tasks.
-* @docs/docker.md: Describes how to build and publish the Docker image,
+- @docs/docker.md: Describes how to build and publish the Docker image,
   including the Dockerfile specification and GitHub Actions publishing workflow.
-* @docs/ci-cd.md: Describes the CI/CD pipeline, including triggers, jobs, and
+- @docs/ci-cd.md: Describes the CI/CD pipeline, including triggers, jobs, and
   Docker image tagging strategy.
 
 ## Node Version
@@ -22,7 +22,7 @@ resolved — in CI workflows, scripts, or tooling — it must be read from `.nvm
 
 ## Project Structure
 
-* `./docs`: A directory containing documentation for the project.
+- `./docs`: A directory containing documentation for the project.
 
 ## Testing
 
@@ -32,8 +32,8 @@ Tests live in `src/__tests__/` and follow the naming convention
 Test task files (Markdown task files used for testing) should follow the naming
 convention `test-{name}.md` (e.g. `test-foo-bar.md`).
 
-* `npm run test:unit`: Run unit tests (`*.unit.test.ts`).
-* `npm run test:integration`: Run integration tests (`*.integration.test.ts`).
+- `npm run test:unit`: Run unit tests (`*.unit.test.ts`).
+- `npm run test:integration`: Run integration tests (`*.integration.test.ts`).
 
 ## Project Tasks
 
@@ -42,8 +42,7 @@ etc). Scripts make it easier for human or machine to automate the various
 aspects of the project. Add, update or remove scripts whenever these aspects
 change.
 
-* `npm run docker:build`: Build the Docker image locally, tagged as
+- `npm run docker:build`: Build the Docker image locally, tagged as
   `claude-tasks:local`.
-* `npm run test:unit`: Run unit tests (`*.unit.test.ts`).
-* `npm run test:integration`: Run integration tests (`*.integration.test.ts`).
-
+- `npm run test:unit`: Run unit tests (`*.unit.test.ts`).
+- `npm run test:integration`: Run integration tests (`*.integration.test.ts`).

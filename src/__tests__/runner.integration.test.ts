@@ -19,16 +19,25 @@ describe('integration: mcp-tool-integration-test task', () => {
   it(
     'runs the integration-test tag and records a successful task run',
     async () => {
-      tempOutputDir = await mkdtemp(join(tmpdir(), 'claude-tasks-integration-'));
+      tempOutputDir = await mkdtemp(
+        join(tmpdir(), 'claude-tasks-integration-')
+      );
 
       await run(['integration-test'], TASK_DIR, tempOutputDir);
 
-      const summaryRaw = await readFile(join(tempOutputDir, 'task-runs.json'), 'utf-8');
-      const summary = JSON.parse(summaryRaw) as { taskRuns: Array<{ taskName: string; status: string }> };
+      const summaryRaw = await readFile(
+        join(tempOutputDir, 'task-runs.json'),
+        'utf-8'
+      );
+      const summary = JSON.parse(summaryRaw) as {
+        taskRuns: Array<{ taskName: string; status: string }>;
+      };
 
       expect(summary.taskRuns.length).toBeGreaterThanOrEqual(1);
 
-      const taskRun = summary.taskRuns.find((r) => r.taskName === 'mcp-tool-integration-test');
+      const taskRun = summary.taskRuns.find(
+        (r) => r.taskName === 'mcp-tool-integration-test'
+      );
       expect(taskRun).toBeDefined();
       expect(taskRun!.status).toBe('success');
     },

@@ -9,17 +9,17 @@ Releases publish versioned Docker images to the GitHub Container Registry
 
 ## Environment
 
-| Setting | Value |
-|---|---|
+| Setting      | Value                               |
+| ------------ | ----------------------------------- |
 | Node version | Read from `.nvmrc` at the repo root |
 
 ## Triggers
 
-| Event | When It Fires |
-|---|---|
-| `push` to `main` | On every commit merged or pushed directly to `main` |
-| `pull_request` to `main` | On every commit pushed to an open pull request |
-| `release` (published) | When a GitHub release is published (see [Creating a Release](#creating-a-release)) |
+| Event                    | When It Fires                                                                      |
+| ------------------------ | ---------------------------------------------------------------------------------- |
+| `push` to `main`         | On every commit merged or pushed directly to `main`                                |
+| `pull_request` to `main` | On every commit pushed to an open pull request                                     |
+| `release` (published)    | When a GitHub release is published (see [Creating a Release](#creating-a-release)) |
 
 ## Jobs
 
@@ -41,10 +41,10 @@ but not pushed.
 Every CI build produces a `sha-{short-sha}` tag for traceability. Releases
 additionally produce human-readable version tags.
 
-| Trigger | Tags Applied |
-|---|---|
-| `push` to `main` | `sha-{short-sha}` |
-| `pull_request` | `sha-{short-sha}` |
+| Trigger               | Tags Applied                                                                         |
+| --------------------- | ------------------------------------------------------------------------------------ |
+| `push` to `main`      | `sha-{short-sha}`                                                                    |
+| `pull_request`        | `sha-{short-sha}`                                                                    |
 | `release` (published) | `sha-{short-sha}`, `latest`, `{major}`, `{major}.{minor}`, `{major}.{minor}.{patch}` |
 
 For example, publishing release `1.2.3` would produce tags:

@@ -17,7 +17,7 @@ tags will be scheduled to run.
 ## Environment Variables
 
 | Variable            | Default    | Description                                                   |
-|---------------------|------------|---------------------------------------------------------------|
+| ------------------- | ---------- | ------------------------------------------------------------- |
 | `TASK_DIR`          | `./tasks`  | Directory containing task Markdown files.                     |
 | `OUTPUT_DIR`        | `./output` | Root directory where task output is written.                  |
 | `ANTHROPIC_API_KEY` | —          | Anthropic API key. Required when not using OAuth credentials. |
@@ -45,7 +45,6 @@ tags will be scheduled to run.
    or `allowDangerouslySkipPermissions` — all permission configuration must be
    defined in the task's `claudeOptions`. The task's return message is a summary
    of the task:
-
    - **Success**: A summary of all outputs — the files written by the agent,
      their paths, and a description of their contents.
    - **Failed**: A description of the error, diagnostic information to help
@@ -78,13 +77,13 @@ tags will be scheduled to run.
 
 ### Fields
 
-| Field             | Type   | Description                                                          |
-|-------------------|--------|----------------------------------------------------------------------|
-| `taskId`          | string | UUID uniquely identifying this task run.                             |
-| `taskName`        | string | The name of the task, derived from the task file.                    |
-| `status`          | string | `"success"` or `"failed"`.                                           |
-| `outputDir`       | string | Absolute path to the output directory for this task run.             |
+| Field             | Type   | Description                                                                          |
+| ----------------- | ------ | ------------------------------------------------------------------------------------ |
+| `taskId`          | string | UUID uniquely identifying this task run.                                             |
+| `taskName`        | string | The name of the task, derived from the task file.                                    |
+| `status`          | string | `"success"` or `"failed"`.                                                           |
+| `outputDir`       | string | Absolute path to the output directory for this task run.                             |
 | `startedAt`       | string | ISO 8601 local machine timestamp with timezone offset when the task began executing. |
 | `endedAt`         | string | ISO 8601 local machine timestamp with timezone offset when the task finished.        |
-| `durationSeconds` | number | Elapsed time in seconds, rounded up (ceiling) to the nearest whole second. |
-| `resultSummary`   | string | The return summary message from Claude (see Execution Flow step 4).  |
+| `durationSeconds` | number | Elapsed time in seconds, rounded up (ceiling) to the nearest whole second.           |
+| `resultSummary`   | string | The return summary message from Claude (see Execution Flow step 4).                  |

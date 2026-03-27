@@ -107,8 +107,14 @@ describe('discoverTasks', () => {
   });
 
   it('ignores non-.md files', async () => {
-    mockReaddir.mockResolvedValue(['task.md', 'readme.txt', '.DS_Store'] as never);
-    mockReadFile.mockResolvedValue('---\nname: task\ntags: test\n---\n\nDo it.' as never);
+    mockReaddir.mockResolvedValue([
+      'task.md',
+      'readme.txt',
+      '.DS_Store',
+    ] as never);
+    mockReadFile.mockResolvedValue(
+      '---\nname: task\ntags: test\n---\n\nDo it.' as never
+    );
 
     const tasks = await discoverTasks('./tasks');
     expect(tasks).toHaveLength(1);
@@ -127,7 +133,11 @@ describe('discoverTasks', () => {
 describe('filterTasksByTags', () => {
   const tasks: TaskDefinition[] = [
     { file: 'a.md', data: { name: 'a', tags: 'daily' }, content: 'A' },
-    { file: 'b.md', data: { name: 'b', tags: ['daily', 'reporting'] }, content: 'B' },
+    {
+      file: 'b.md',
+      data: { name: 'b', tags: ['daily', 'reporting'] },
+      content: 'B',
+    },
     { file: 'c.md', data: { name: 'c', tags: 'weekly' }, content: 'C' },
   ];
 
@@ -166,7 +176,11 @@ describe('filterTasksByTags', () => {
 describe('runTask', () => {
   const task: TaskDefinition = {
     file: 'task.md',
-    data: { name: 'my-task', tags: 'test', claudeOptions: { model: 'claude-sonnet-4-6' } },
+    data: {
+      name: 'my-task',
+      tags: 'test',
+      claudeOptions: { model: 'claude-sonnet-4-6' },
+    },
     content: 'Do the thing.',
   };
 
@@ -190,8 +204,17 @@ describe('runTask', () => {
   });
 
   it('passes cwd and claudeOptions to query', async () => {
-    const successMsg = { type: 'result', subtype: 'success', result: 'done', is_error: false };
-    mockQuery.mockReturnValue((async function* () { yield successMsg; })() as never);
+    const successMsg = {
+      type: 'result',
+      subtype: 'success',
+      result: 'done',
+      is_error: false,
+    };
+    mockQuery.mockReturnValue(
+      (async function* () {
+        yield successMsg;
+      })() as never
+    );
 
     await runTask(task, '/output/my-task_20260315');
 
@@ -211,7 +234,11 @@ describe('runTask', () => {
       is_error: true,
       errors: ['Exceeded max turns'],
     };
-    mockQuery.mockReturnValue((async function* () { yield errorMsg; })() as never);
+    mockQuery.mockReturnValue(
+      (async function* () {
+        yield errorMsg;
+      })() as never
+    );
 
     const result = await runTask(task, '/output/task');
     expect(result.status).toBe('failed');
@@ -219,9 +246,11 @@ describe('runTask', () => {
   });
 
   it('returns failed when no result message is emitted', async () => {
-    mockQuery.mockReturnValue((async function* () {
-      yield { type: 'assistant', text: 'hello' };
-    })() as never);
+    mockQuery.mockReturnValue(
+      (async function* () {
+        yield { type: 'assistant', text: 'hello' };
+      })() as never
+    );
 
     const result = await runTask(task, '/output/task');
     expect(result.status).toBe('failed');
@@ -240,11 +269,24 @@ describe('run', () => {
   it('writes task-runs.json after executing matching tasks', async () => {
     mockReaddir.mockResolvedValue(['task-a.md', 'task-b.md'] as never);
     mockReadFile
-      .mockResolvedValueOnce('---\nname: task-a\ntags: daily\n---\n\nDo A.' as never)
-      .mockResolvedValueOnce('---\nname: task-b\ntags: weekly\n---\n\nDo B.' as never);
+      .mockResolvedValueOnce(
+        '---\nname: task-a\ntags: daily\n---\n\nDo A.' as never
+      )
+      .mockResolvedValueOnce(
+        '---\nname: task-b\ntags: weekly\n---\n\nDo B.' as never
+      );
 
-    const successMsg = { type: 'result', subtype: 'success', result: 'done', is_error: false };
-    mockQuery.mockReturnValue((async function* () { yield successMsg; })() as never);
+    const successMsg = {
+      type: 'result',
+      subtype: 'success',
+      result: 'done',
+      is_error: false,
+    };
+    mockQuery.mockReturnValue(
+      (async function* () {
+        yield successMsg;
+      })() as never
+    );
 
     await run(['daily'], './tasks', './output');
 
@@ -266,10 +308,17 @@ describe('run', () => {
 
   it('creates output directory named [task-name]_[datetime]', async () => {
     mockReaddir.mockResolvedValue(['task-a.md'] as never);
-    mockReadFile.mockResolvedValue('---\nname: task-a\ntags: daily\n---\n\nDo A.' as never);
+    mockReadFile.mockResolvedValue(
+      '---\nname: task-a\ntags: daily\n---\n\nDo A.' as never
+    );
     mockQuery.mockReturnValue(
       (async function* () {
-        yield { type: 'result', subtype: 'success', result: 'done', is_error: false };
+        yield {
+          type: 'result',
+          subtype: 'success',
+          result: 'done',
+          is_error: false,
+        };
       })() as never
     );
 
@@ -281,7 +330,9 @@ describe('run', () => {
 
   it('records failed status when a task throws', async () => {
     mockReaddir.mockResolvedValue(['task-a.md'] as never);
-    mockReadFile.mockResolvedValue('---\nname: task-a\ntags: daily\n---\n\nDo A.' as never);
+    mockReadFile.mockResolvedValue(
+      '---\nname: task-a\ntags: daily\n---\n\nDo A.' as never
+    );
     mockQuery.mockImplementation(() => {
       throw new Error('SDK exploded');
     });
@@ -296,7 +347,9 @@ describe('run', () => {
 
   it('does nothing when no tasks match the requested tags', async () => {
     mockReaddir.mockResolvedValue(['task-a.md'] as never);
-    mockReadFile.mockResolvedValue('---\nname: task-a\ntags: daily\n---\n\nDo A.' as never);
+    mockReadFile.mockResolvedValue(
+      '---\nname: task-a\ntags: daily\n---\n\nDo A.' as never
+    );
 
     await run(['weekly'], './tasks', './output');
 
@@ -307,26 +360,37 @@ describe('run', () => {
   it('sorts taskRuns by startedAt descending in the written JSON', async () => {
     mockReaddir.mockResolvedValue(['task-a.md', 'task-b.md'] as never);
     mockReadFile
-      .mockResolvedValueOnce('---\nname: task-a\ntags: daily\n---\n\nDo A.' as never)
-      .mockResolvedValueOnce('---\nname: task-b\ntags: daily\n---\n\nDo B.' as never);
+      .mockResolvedValueOnce(
+        '---\nname: task-a\ntags: daily\n---\n\nDo A.' as never
+      )
+      .mockResolvedValueOnce(
+        '---\nname: task-b\ntags: daily\n---\n\nDo B.' as never
+      );
 
     let callCount = 0;
-    mockQuery.mockImplementation(() =>
-      (async function* () {
-        // Stagger timestamps by briefly advancing Date between calls
-        callCount++;
-        yield { type: 'result', subtype: 'success', result: `done-${callCount}`, is_error: false };
-      })() as never
+    mockQuery.mockImplementation(
+      () =>
+        (async function* () {
+          // Stagger timestamps by briefly advancing Date between calls
+          callCount++;
+          yield {
+            type: 'result',
+            subtype: 'success',
+            result: `done-${callCount}`,
+            is_error: false,
+          };
+        })() as never
     );
 
     // Freeze time so we can control startedAt order via mock
     const base = new Date('2026-03-15T10:00:00-07:00');
     const later = new Date('2026-03-15T10:01:00-07:00');
-    const dateSpy = vi.spyOn(global, 'Date')
-      .mockImplementationOnce(() => base as never)   // runDatetime
-      .mockImplementationOnce(() => base as never)   // task-a startedAt
-      .mockImplementationOnce(() => base as never)   // task-a endedAt
-      .mockImplementationOnce(() => later as never)  // task-b startedAt
+    const dateSpy = vi
+      .spyOn(global, 'Date')
+      .mockImplementationOnce(() => base as never) // runDatetime
+      .mockImplementationOnce(() => base as never) // task-a startedAt
+      .mockImplementationOnce(() => base as never) // task-a endedAt
+      .mockImplementationOnce(() => later as never) // task-b startedAt
       .mockImplementationOnce(() => later as never); // task-b endedAt
 
     await run(['daily'], './tasks', './output');
@@ -342,10 +406,17 @@ describe('run', () => {
   it('appends new task runs to existing task-runs.json instead of replacing it', async () => {
     // First run — task-a executes and results are written to task-runs.json
     mockReaddir.mockResolvedValue(['task-a.md'] as never);
-    mockReadFile.mockResolvedValueOnce('---\nname: task-a\ntags: daily\n---\n\nDo A.' as never);
+    mockReadFile.mockResolvedValueOnce(
+      '---\nname: task-a\ntags: daily\n---\n\nDo A.' as never
+    );
     mockQuery.mockReturnValue(
       (async function* () {
-        yield { type: 'result', subtype: 'success', result: 'done-a', is_error: false };
+        yield {
+          type: 'result',
+          subtype: 'success',
+          result: 'done-a',
+          is_error: false,
+        };
       })() as never
     );
 
@@ -362,12 +433,19 @@ describe('run', () => {
     mockReaddir.mockResolvedValue(['task-b.md'] as never);
     // First readFile call is for task-b.md; subsequent calls return the existing task-runs.json
     mockReadFile
-      .mockResolvedValueOnce('---\nname: task-b\ntags: daily\n---\n\nDo B.' as never)
+      .mockResolvedValueOnce(
+        '---\nname: task-b\ntags: daily\n---\n\nDo B.' as never
+      )
       .mockResolvedValue(firstWriteContent as never);
 
     mockQuery.mockReturnValue(
       (async function* () {
-        yield { type: 'result', subtype: 'success', result: 'done-b', is_error: false };
+        yield {
+          type: 'result',
+          subtype: 'success',
+          result: 'done-b',
+          is_error: false,
+        };
       })() as never
     );
 
@@ -377,7 +455,9 @@ describe('run', () => {
     expect(mockWriteFile).toHaveBeenCalledTimes(1);
     const secondWriteContent = mockWriteFile.mock.calls[0][1] as string;
     const summary = JSON.parse(secondWriteContent);
-    const taskNames = summary.taskRuns.map((r: { taskName: string }) => r.taskName);
+    const taskNames = summary.taskRuns.map(
+      (r: { taskName: string }) => r.taskName
+    );
 
     expect(summary.taskRuns).toHaveLength(2);
     expect(taskNames).toContain('task-a');
@@ -386,12 +466,19 @@ describe('run', () => {
 
   it('records durationSeconds as ceiling of elapsed milliseconds', async () => {
     mockReaddir.mockResolvedValue(['task-a.md'] as never);
-    mockReadFile.mockResolvedValue('---\nname: task-a\ntags: daily\n---\n\nDo A.' as never);
+    mockReadFile.mockResolvedValue(
+      '---\nname: task-a\ntags: daily\n---\n\nDo A.' as never
+    );
 
     // Make the query take a tiny bit of time so duration > 0
     mockQuery.mockReturnValue(
       (async function* () {
-        yield { type: 'result', subtype: 'success', result: 'done', is_error: false };
+        yield {
+          type: 'result',
+          subtype: 'success',
+          result: 'done',
+          is_error: false,
+        };
       })() as never
     );
 
