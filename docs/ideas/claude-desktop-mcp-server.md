@@ -7,9 +7,11 @@ Expose task-running capabilities as an MCP server so Claude Desktop users can li
 ## What Would Change
 
 **`package.json`**
+
 - Add `@modelcontextprotocol/sdk` as a dependency
 
 **New file: `src/mcp-server.ts`**
+
 - Implement an MCP server using `@modelcontextprotocol/sdk/server`
 - Transport: `StdioServerTransport` (required for Claude Desktop)
 - Register tools:
@@ -19,9 +21,11 @@ Expose task-running capabilities as an MCP server so Claude Desktop users can li
 - Reuse existing `discoverTasks()`, `filterTasksByTags()`, and `runTask()` from `runner.ts` — no changes to core runner needed
 
 **`package.json` scripts**
+
 - Add `"mcp": "tsx src/mcp-server.ts"`
 
 **Claude Desktop configuration** (`claude_desktop_config.json`)
+
 ```json
 {
   "mcpServers": {

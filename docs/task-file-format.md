@@ -59,19 +59,19 @@ claudeOptions:
 
 ## `claudeOptions` Reference
 
-| Option              | Type                          | Default     | Description |
-|---------------------|-------------------------------|-------------|-------------|
-| `allowedTools`      | `string[]`                    | `undefined` | Whitelist of tool names the model is permitted to call. All other tools are blocked. |
-| `permissionMode`    | `"default" \| "acceptEdits" \| "bypassPermissions" \| "plan"` | `"default"` | Controls how the agent handles permission prompts. |
-| `debug`             | `boolean`                     | `false`     | Enable verbose debug logging for the query execution. |
-| `disallowedTools`   | `string[]`                    | `undefined` | Blacklist of tool names the model is not permitted to call. |
-| `effort`            | `"low" \| "medium" \| "high"` | `"medium"`  | Controls the reasoning effort level applied to the task. |
-| `maxBudgetUsd`      | `number`                      | `undefined` | Maximum spend cap in USD. The query will stop if this limit is reached. |
-| `maxThinkingTokens` | `number`                      | `undefined` | Maximum number of tokens to allocate for model reasoning/thinking. |
-| `maxTurns`          | `number`                      | `undefined` | Maximum number of agentic turns before the query stops. |
-| `mcpServers`        | `object[]`                    | `undefined` | MCP server configurations to make available to the task. |
-| `model`             | `string`                      | `undefined` | Model ID to use. Defaults to the SDK's configured default when not set. |
-| `tools`             | `ToolDefinition[]`            | `undefined` | Custom tool definitions to provide to the model. |
+| Option              | Type                                                          | Default     | Description                                                                          |
+| ------------------- | ------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------ |
+| `allowedTools`      | `string[]`                                                    | `undefined` | Whitelist of tool names the model is permitted to call. All other tools are blocked. |
+| `permissionMode`    | `"default" \| "acceptEdits" \| "bypassPermissions" \| "plan"` | `"default"` | Controls how the agent handles permission prompts.                                   |
+| `debug`             | `boolean`                                                     | `false`     | Enable verbose debug logging for the query execution.                                |
+| `disallowedTools`   | `string[]`                                                    | `undefined` | Blacklist of tool names the model is not permitted to call.                          |
+| `effort`            | `"low" \| "medium" \| "high"`                                 | `"medium"`  | Controls the reasoning effort level applied to the task.                             |
+| `maxBudgetUsd`      | `number`                                                      | `undefined` | Maximum spend cap in USD. The query will stop if this limit is reached.              |
+| `maxThinkingTokens` | `number`                                                      | `undefined` | Maximum number of tokens to allocate for model reasoning/thinking.                   |
+| `maxTurns`          | `number`                                                      | `undefined` | Maximum number of agentic turns before the query stops.                              |
+| `mcpServers`        | `object[]`                                                    | `undefined` | MCP server configurations to make available to the task.                             |
+| `model`             | `string`                                                      | `undefined` | Model ID to use. Defaults to the SDK's configured default when not set.              |
+| `tools`             | `ToolDefinition[]`                                            | `undefined` | Custom tool definitions to provide to the model.                                     |
 
 ## Examples
 

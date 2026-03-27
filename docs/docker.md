@@ -49,16 +49,16 @@ docker run --rm \
 
 ## Dockerfile
 
-* The Node major version **must always match the version in `.nvmrc`**, which is
+- The Node major version **must always match the version in `.nvmrc`**, which is
   the source of truth.
-* When `.nvmrc` changes, update the `FROM` line accordingly.
+- When `.nvmrc` changes, update the `FROM` line accordingly.
 
 ## Environment Variables
 
-| Variable   | Default    | Description                                        |
-|------------|------------|----------------------------------------------------|
-| `TASK_DIR` | `/tasks`   | Directory containing task Markdown files to run.   |
-| `OUTPUT_DIR` | `/output` | Root directory where task output is written.      |
+| Variable     | Default   | Description                                      |
+| ------------ | --------- | ------------------------------------------------ |
+| `TASK_DIR`   | `/tasks`  | Directory containing task Markdown files to run. |
+| `OUTPUT_DIR` | `/output` | Root directory where task output is written.     |
 
 ## Volume Mounts
 
@@ -109,10 +109,10 @@ it to the GitHub Container Registry (`ghcr.io`).
 
 **Tags published per release:**
 
-| Tag pattern             | Example            |
-|-------------------------|--------------------|
-| `latest`                | `latest`           |
-| `{major}`               | `1`                |
-| `{major}.{minor}`       | `1.2`              |
-| `{major}.{minor}.{patch}` | `1.2.3`          |
-| `sha-{short-sha}`       | `sha-a1b2c3d`      |
+| Tag pattern               | Example       |
+| ------------------------- | ------------- |
+| `latest`                  | `latest`      |
+| `{major}`                 | `1`           |
+| `{major}.{minor}`         | `1.2`         |
+| `{major}.{minor}.{patch}` | `1.2.3`       |
+| `sha-{short-sha}`         | `sha-a1b2c3d` |

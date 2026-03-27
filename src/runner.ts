@@ -78,7 +78,9 @@ export function buildQueryOptions(
 // ── Core Functions ────────────────────────────────────────────────────────────
 
 /** Read all .md files from taskDir and parse their frontmatter. */
-export async function discoverTasks(taskDir: string): Promise<TaskDefinition[]> {
+export async function discoverTasks(
+  taskDir: string
+): Promise<TaskDefinition[]> {
   const files = await readdir(taskDir);
   const tasks: TaskDefinition[] = [];
 
@@ -86,16 +88,25 @@ export async function discoverTasks(taskDir: string): Promise<TaskDefinition[]> 
     const filePath = join(taskDir, file);
     const raw = await readFile(filePath, 'utf-8');
     const { data, content } = matter(raw);
-    tasks.push({ file: filePath, data: data as TaskFrontmatter, content: content.trim() });
+    tasks.push({
+      file: filePath,
+      data: data as TaskFrontmatter,
+      content: content.trim(),
+    });
   }
 
   return tasks;
 }
 
 /** Return only tasks whose tags overlap with the requested tags. */
-export function filterTasksByTags(tasks: TaskDefinition[], tags: string[]): TaskDefinition[] {
+export function filterTasksByTags(
+  tasks: TaskDefinition[],
+  tags: string[]
+): TaskDefinition[] {
   return tasks.filter((task) => {
-    const taskTags = Array.isArray(task.data.tags) ? task.data.tags : [task.data.tags];
+    const taskTags = Array.isArray(task.data.tags)
+      ? task.data.tags
+      : [task.data.tags];
     return tags.some((tag) => taskTags.includes(tag));
   });
 }
@@ -114,12 +125,18 @@ export async function runTask(
         return { status: 'success', resultSummary: msg.result };
       } else {
         const detail = 'errors' in msg ? msg.errors.join('; ') : msg.subtype;
-        return { status: 'failed', resultSummary: `Error (${msg.subtype}): ${detail}` };
+        return {
+          status: 'failed',
+          resultSummary: `Error (${msg.subtype}): ${detail}`,
+        };
       }
     }
   }
 
-  return { status: 'failed', resultSummary: 'Task completed without a result message.' };
+  return {
+    status: 'failed',
+    resultSummary: 'Task completed without a result message.',
+  };
 }
 
 // ── Orchestrator ──────────────────────────────────────────────────────────────
@@ -140,12 +157,16 @@ export async function run(
     return;
   }
 
-  console.log(`Running ${scheduled.length} task(s): ${scheduled.map((t) => t.data.name).join(', ')}`);
+  console.log(
+    `Running ${scheduled.length} task(s): ${scheduled.map((t) => t.data.name).join(', ')}`
+  );
 
   const taskRuns: TaskRun[] = [];
 
   for (const task of scheduled) {
-    const taskOutputDir = resolve(join(outputDir, `${task.data.name}_${datetimeStr}`));
+    const taskOutputDir = resolve(
+      join(outputDir, `${task.data.name}_${datetimeStr}`)
+    );
     await mkdir(taskOutputDir, { recursive: true });
 
     const taskId = randomUUID();
@@ -163,7 +184,9 @@ export async function run(
     }
 
     const endedAt = new Date();
-    const durationSeconds = Math.ceil((endedAt.getTime() - startedAt.getTime()) / 1000);
+    const durationSeconds = Math.ceil(
+      (endedAt.getTime() - startedAt.getTime()) / 1000
+    );
 
     console.log(`Task ${task.data.name}: ${result.status}`);
 
@@ -184,7 +207,8 @@ export async function run(
   let existingRuns: TaskRun[] = [];
   try {
     const existing = await readFile(summaryPath, 'utf-8');
-    existingRuns = (JSON.parse(existing) as { taskRuns: TaskRun[] }).taskRuns ?? [];
+    existingRuns =
+      (JSON.parse(existing) as { taskRuns: TaskRun[] }).taskRuns ?? [];
   } catch {
     // File doesn't exist yet — start fresh
   }
@@ -192,7 +216,11 @@ export async function run(
   const allRuns = [...existingRuns, ...taskRuns];
   allRuns.sort((a, b) => b.startedAt.localeCompare(a.startedAt));
 
-  await writeFile(summaryPath, JSON.stringify({ taskRuns: allRuns }, null, 2), 'utf-8');
+  await writeFile(
+    summaryPath,
+    JSON.stringify({ taskRuns: allRuns }, null, 2),
+    'utf-8'
+  );
   console.log(`Summary written to ${summaryPath}`);
 }
 
@@ -205,7 +233,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exit(1);
   }
 
-  const tags = tagsArg.split(',').map((t) => t.trim()).filter(Boolean);
+  const tags = tagsArg
+    .split(',')
+    .map((t) => t.trim())
+    .filter(Boolean);
   const taskDir = process.env.TASK_DIR ?? './tasks';
   const outputDir = process.env.OUTPUT_DIR ?? './output';
 

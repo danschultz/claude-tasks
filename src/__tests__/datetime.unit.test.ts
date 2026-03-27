@@ -8,7 +8,9 @@ describe('formatLocalISO', () => {
     const date = new Date('2026-03-15T17:00:00Z');
     const result = formatLocalISO(date);
     // Should match ISO 8601 with offset pattern
-    expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/);
+    expect(result).toMatch(
+      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/
+    );
   });
 
   it('includes the correct date components', () => {
