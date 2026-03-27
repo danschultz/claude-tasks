@@ -8,7 +8,7 @@ claudeOptions:
       command: npx
       args:
         - --yes
-        - "@modelcontextprotocol/server-filesystem"
+        - '@modelcontextprotocol/server-filesystem'
         - /tasks
   allowedTools:
     - mcp__filesystem__list_directory

@@ -41,17 +41,24 @@ describe('integration: docker runner', () => {
       );
 
       if (result.status !== 0) {
-        throw new Error(`docker run failed (exit ${result.status}):\n${result.stderr}`);
+        throw new Error(
+          `docker run failed (exit ${result.status}):\n${result.stderr}`
+        );
       }
 
-      const summaryRaw = await readFile(join(tempOutputDir, 'task-runs.json'), 'utf-8');
+      const summaryRaw = await readFile(
+        join(tempOutputDir, 'task-runs.json'),
+        'utf-8'
+      );
       const summary = JSON.parse(summaryRaw) as {
         taskRuns: Array<{ taskName: string; status: string }>;
       };
 
       expect(summary.taskRuns.length).toBeGreaterThanOrEqual(1);
 
-      const mcpRun = summary.taskRuns.find((r) => r.taskName === 'docker-mcp-test');
+      const mcpRun = summary.taskRuns.find(
+        (r) => r.taskName === 'docker-mcp-test'
+      );
       expect(mcpRun).toBeDefined();
       expect(mcpRun!.status).toBe('success');
     },
