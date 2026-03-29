@@ -35,6 +35,8 @@ convention `test-{name}.md` (e.g. `test-foo-bar.md`).
 - `npm run test:unit`: Run unit tests (`*.unit.test.ts`).
 - `npm run test:integration`: Run integration tests (`*.integration.test.ts`).
 
+Run unit and integration tests to verify changes.
+
 ## Project Tasks
 
 NPM scripts are used for various tasks of the project (builds, linting, testing,

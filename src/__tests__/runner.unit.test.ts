@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   buildQueryOptions,
+  buildTaskPrompt,
   discoverTasks,
   filterTasksByTags,
   runTask,
@@ -171,6 +172,26 @@ describe('filterTasksByTags', () => {
   });
 });
 
+// ── buildTaskPrompt ───────────────────────────────────────────────────────────
+
+describe('buildTaskPrompt', () => {
+  it('includes the task content in the prompt', () => {
+    const prompt = buildTaskPrompt('Do the thing.');
+    expect(prompt).toContain('Do the thing.');
+  });
+
+  it('includes JSON output format instructions', () => {
+    const prompt = buildTaskPrompt('Do the thing.');
+    expect(prompt).toContain('"status"');
+    expect(prompt).toContain('"message"');
+  });
+
+  it('mentions writing files to a directory', () => {
+    const prompt = buildTaskPrompt('Do the thing.');
+    expect(prompt).toContain('directory');
+  });
+});
+
 // ── runTask ───────────────────────────────────────────────────────────────────
 
 describe('runTask', () => {
@@ -188,7 +209,10 @@ describe('runTask', () => {
     const successMsg = {
       type: 'result',
       subtype: 'success',
-      result: 'Wrote output.txt with 3 lines.',
+      result: JSON.stringify({
+        status: 'success',
+        message: 'Wrote output.txt with 3 lines.',
+      }),
       is_error: false,
     };
     mockQuery.mockReturnValue(
@@ -203,11 +227,50 @@ describe('runTask', () => {
     expect(result.resultSummary).toBe('Wrote output.txt with 3 lines.');
   });
 
-  it('passes cwd and claudeOptions to query', async () => {
+  it('returns failed when SDK success result contains status: failed', async () => {
     const successMsg = {
       type: 'result',
       subtype: 'success',
-      result: 'done',
+      result: JSON.stringify({
+        status: 'failed',
+        message: 'Could not find the requested file.',
+      }),
+      is_error: false,
+    };
+    mockQuery.mockReturnValue(
+      (async function* () {
+        yield successMsg;
+      })() as never
+    );
+
+    const result = await runTask(task, '/output/my-task_20260315_100000');
+    expect(result.status).toBe('failed');
+    expect(result.resultSummary).toBe('Could not find the requested file.');
+  });
+
+  it('falls back to success with raw result when JSON parsing fails', async () => {
+    const successMsg = {
+      type: 'result',
+      subtype: 'success',
+      result: 'not valid json',
+      is_error: false,
+    };
+    mockQuery.mockReturnValue(
+      (async function* () {
+        yield successMsg;
+      })() as never
+    );
+
+    const result = await runTask(task, '/output/my-task_20260315_100000');
+    expect(result.status).toBe('success');
+    expect(result.resultSummary).toBe('not valid json');
+  });
+
+  it('passes cwd and claudeOptions to query using the wrapped prompt', async () => {
+    const successMsg = {
+      type: 'result',
+      subtype: 'success',
+      result: JSON.stringify({ status: 'success', message: 'done' }),
       is_error: false,
     };
     mockQuery.mockReturnValue(
@@ -219,7 +282,7 @@ describe('runTask', () => {
     await runTask(task, '/output/my-task_20260315');
 
     expect(mockQuery).toHaveBeenCalledWith({
-      prompt: 'Do the thing.',
+      prompt: buildTaskPrompt('Do the thing.'),
       options: expect.objectContaining({
         cwd: '/output/my-task_20260315',
         model: 'claude-sonnet-4-6',
