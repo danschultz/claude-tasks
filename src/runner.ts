@@ -89,8 +89,8 @@ expecting JSON.
 
 ## Output Format
 
-* Respond with ONLY a raw JSON object — no backticks, no markdown, no
-  explanation. Do NOT wrap in code fences. The exact format: \`{"status":
+* Respond with _ONLY_ a raw JSON object — no backticks, no markdown, no
+  explanation. Do _NOT_ wrap in code fences. The exact format: \`{"status":
   "success", "message": "..."} or {"status": "failed", "message": "..."}\`
 
 ---
@@ -147,7 +147,7 @@ export async function runTask(
 
   for await (const msg of q) {
     if (msg.type === 'result') {
-      if (msg.subtype === 'success') {
+      if (msg.subtype === 'success' && !msg.is_error) {
         try {
           const parsed = JSON.parse(msg.result) as {
             status: string;
@@ -163,6 +163,8 @@ export async function runTask(
         } catch {
           return { status: 'success', resultSummary: msg.result };
         }
+      } else if (msg.subtype === 'success' && msg.is_error) {
+        return { status: 'failed', resultSummary: msg.result };
       } else {
         const detail = 'errors' in msg ? msg.errors.join('; ') : msg.subtype;
         return {

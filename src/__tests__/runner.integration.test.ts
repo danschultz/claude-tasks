@@ -30,7 +30,11 @@ describe('integration: prompt-wrapping-test task writes to output dir', () => {
         'utf-8'
       );
       const summary = JSON.parse(summaryRaw) as {
-        taskRuns: Array<{ taskName: string; status: string; outputDir: string }>;
+        taskRuns: Array<{
+          taskName: string;
+          status: string;
+          outputDir: string;
+        }>;
       };
 
       const taskRun = summary.taskRuns.find(
@@ -84,4 +88,3 @@ describe('integration: prompt-failure-test task reports failure', () => {
     TIMEOUT_MS
   );
 });
-
