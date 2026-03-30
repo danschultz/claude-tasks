@@ -75,6 +75,34 @@ export function buildQueryOptions(
   return opts;
 }
 
+/** Wrap a task's content in a system prompt that provides context and enforces a JSON result format. */
+export function buildTaskPrompt(
+  taskContent: string,
+  outputDir: string
+): string {
+  return `# Task Runner
+
+You're a task runner that runs jobs. You're invoked by a parent Node process
+through a code agent. The Node process will process the result and expects is
+expecting JSON.
+
+## Input
+
+* Any files the task wants to write should be written to \`${outputDir}\`.
+
+## Output Format
+
+* Respond with _ONLY_ a raw JSON object — no backticks, no markdown, no
+  explanation. Do _NOT_ wrap in code fences. The exact format: \`{"status":
+  "success", "message": "..."} or {"status": "failed", "message": "..."}\`
+
+---
+
+Here's the task to run:
+
+${taskContent}`;
+}
+
 // ── Core Functions ────────────────────────────────────────────────────────────
 
 /** Read all .md files from taskDir and parse their frontmatter. */
@@ -117,12 +145,29 @@ export async function runTask(
   outputDir: string
 ): Promise<{ status: 'success' | 'failed'; resultSummary: string }> {
   const options = buildQueryOptions(task.data.claudeOptions, outputDir);
-  const q = query({ prompt: task.content, options });
+  const prompt = buildTaskPrompt(task.content, outputDir);
+  const q = query({ prompt, options });
 
   for await (const msg of q) {
     if (msg.type === 'result') {
-      if (msg.subtype === 'success') {
-        return { status: 'success', resultSummary: msg.result };
+      if (msg.subtype === 'success' && !msg.is_error) {
+        try {
+          const parsed = JSON.parse(msg.result) as {
+            status: string;
+            message: string;
+          };
+          if (parsed.status === 'failed') {
+            return { status: 'failed', resultSummary: parsed.message };
+          }
+          return {
+            status: 'success',
+            resultSummary: parsed.message ?? msg.result,
+          };
+        } catch {
+          return { status: 'success', resultSummary: msg.result };
+        }
+      } else if (msg.subtype === 'success' && msg.is_error) {
+        return { status: 'failed', resultSummary: msg.result };
       } else {
         const detail = 'errors' in msg ? msg.errors.join('; ') : msg.subtype;
         return {
