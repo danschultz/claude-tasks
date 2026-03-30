@@ -176,19 +176,19 @@ describe('filterTasksByTags', () => {
 
 describe('buildTaskPrompt', () => {
   it('includes the task content in the prompt', () => {
-    const prompt = buildTaskPrompt('Do the thing.');
+    const prompt = buildTaskPrompt('Do the thing.', '/output/task-001');
     expect(prompt).toContain('Do the thing.');
   });
 
   it('includes JSON output format instructions', () => {
-    const prompt = buildTaskPrompt('Do the thing.');
+    const prompt = buildTaskPrompt('Do the thing.', '/output/task-001');
     expect(prompt).toContain('"status"');
     expect(prompt).toContain('"message"');
   });
 
   it('mentions writing files to a directory', () => {
-    const prompt = buildTaskPrompt('Do the thing.');
-    expect(prompt).toContain('directory');
+    const prompt = buildTaskPrompt('Do the thing.', '/output/task-001');
+    expect(prompt).toContain('/output/task-001');
   });
 });
 
@@ -282,7 +282,7 @@ describe('runTask', () => {
     await runTask(task, '/output/my-task_20260315');
 
     expect(mockQuery).toHaveBeenCalledWith({
-      prompt: buildTaskPrompt('Do the thing.'),
+      prompt: buildTaskPrompt('Do the thing.', '/output/my-task_20260315'),
       options: expect.objectContaining({
         cwd: '/output/my-task_20260315',
         model: 'claude-sonnet-4-6',

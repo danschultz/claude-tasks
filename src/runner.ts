@@ -76,7 +76,10 @@ export function buildQueryOptions(
 }
 
 /** Wrap a task's content in a system prompt that provides context and enforces a JSON result format. */
-export function buildTaskPrompt(taskContent: string): string {
+export function buildTaskPrompt(
+  taskContent: string,
+  outputDir: string
+): string {
   return `# Task Runner
 
 You're a task runner that runs jobs. You're invoked by a parent Node process
@@ -85,7 +88,7 @@ expecting JSON.
 
 ## Input
 
-* Expect a directory where the task can write files.
+* Any files the task wants to write should be written to \`${outputDir}\`.
 
 ## Output Format
 
@@ -142,7 +145,7 @@ export async function runTask(
   outputDir: string
 ): Promise<{ status: 'success' | 'failed'; resultSummary: string }> {
   const options = buildQueryOptions(task.data.claudeOptions, outputDir);
-  const prompt = buildTaskPrompt(task.content);
+  const prompt = buildTaskPrompt(task.content, outputDir);
   const q = query({ prompt, options });
 
   for await (const msg of q) {
